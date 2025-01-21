@@ -26,6 +26,21 @@
   <!-- Required Checkbox -->
   <mat-checkbox [(ngModel)]="newField.required">Required</mat-checkbox>
 
+  <!-- Email Validation Checkbox -->
+  <mat-checkbox [(ngModel)]="newField.email">Email</mat-checkbox>
+
+  <!-- Min Length Input -->
+  <mat-form-field appearance="fill" class="full-width" *ngIf="newField.type === 'text' || newField.type === 'textarea' || newField.type === 'email'">
+    <mat-label>Min Length</mat-label>
+    <input matInput type="number" [(ngModel)]="newField.minLength" placeholder="Enter minimum length" />
+  </mat-form-field>
+
+  <!-- Max Length Input -->
+  <mat-form-field appearance="fill" class="full-width" *ngIf="newField.type === 'text' || newField.type === 'textarea' || newField.type === 'email'">
+    <mat-label>Max Length</mat-label>
+    <input matInput type="number" [(ngModel)]="newField.maxLength" placeholder="Enter maximum length" />
+  </mat-form-field>
+
   <!-- Options for Dropdown or Radio -->
   <div *ngIf="newField.type === 'dropdown' || newField.type === 'radio'">
     <mat-form-field appearance="fill">
@@ -36,9 +51,8 @@
         placeholder="Enter options separated by commas"
         (change)="handleOptionsChange($event)"
       />
-    </mat-form-field>    
+    </mat-form-field>
   </div>
-  <br> <br>
-  <!-- Add Field Button -->
+
   <button mat-raised-button color="primary" (click)="addField()">Add Field</button>
 </div>

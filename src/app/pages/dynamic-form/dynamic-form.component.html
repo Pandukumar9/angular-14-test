@@ -1,18 +1,26 @@
+
+
 <div class="dynamic-form">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div *ngFor="let field of fields">
+    <div *ngFor="let field of fields; let i = index" class="formFields">
       <!-- Text Input -->
       <mat-form-field *ngIf="field.type === 'text'" appearance="fill" class="full-width">
         <mat-label>{{ field.label }}</mat-label>
         <input matInput [formControlName]="field.label" [placeholder]="field.placeholder ?? ''" />
       </mat-form-field>
-  
+
+      <!-- Email Input -->
+      <mat-form-field *ngIf="field.type === 'email'" appearance="fill" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput type="email" [formControlName]="field.label" [placeholder]="field.placeholder ?? ''" />
+      </mat-form-field>
+
       <!-- Textarea -->
       <mat-form-field *ngIf="field.type === 'textarea'" appearance="fill" class="full-width">
         <mat-label>{{ field.label }}</mat-label>
         <textarea matInput [formControlName]="field.label" [placeholder]="field.placeholder ?? ''"></textarea>
       </mat-form-field>
-  
+
       <!-- Dropdown -->
       <mat-form-field *ngIf="field.type === 'dropdown'" appearance="fill" class="full-width">
         <mat-label>{{ field.label }}</mat-label>
@@ -22,25 +30,51 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      
-  
+
       <!-- Checkbox -->
       <div *ngIf="field.type === 'checkbox'" class="checkbox-group">
         <mat-checkbox [formControlName]="field.label">{{ field.label }}</mat-checkbox>
       </div>
-  
+
       <!-- Radio Button -->
       <div class="radio-group" *ngIf="field.type === 'radio'">
-        <label>{{ field.label }}</label>
+        <mat-label>{{ field.label }}</mat-label>
         <mat-radio-group [formControlName]="field.label">
           <mat-radio-button *ngFor="let option of field.options" [value]="option">
             {{ option }}
           </mat-radio-button>
         </mat-radio-group>
       </div>
-      
+
+      <!-- File Input -->
+      <div *ngIf="field.type === 'file'" class="file-input-group">
+        <mat-label>{{ field.label }}</mat-label><br>
+        <input type="file" (change)="onFileChange($event, field.label)" />
+      </div>
+
+      <!-- Time Input -->
+      <mat-form-field *ngIf="field.type === 'time'" appearance="fill" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput type="time" [formControlName]="field.label" />
+      </mat-form-field>
+
+      <!-- Date Input -->
+      <mat-form-field *ngIf="field.type === 'date'" appearance="fill" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput type="date" [formControlName]="field.label" />
+      </mat-form-field>
+
+      <!-- Reset Button -->
+      <div *ngIf="field.type === 'reset'" class="reset-button">
+        <button mat-raised-button color="warn" type="reset">Reset Form</button>
+      </div>
+
+      <!-- Remove Button -->
+      <button mat-icon-button color="warn" class="btn-style" (click)="removeField(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
-  
+
     <button *ngIf="fields.length > 0" mat-raised-button color="primary" type="submit">Submit</button>
   </form>
 </div>

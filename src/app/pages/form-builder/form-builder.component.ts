@@ -6,11 +6,10 @@ import { FormFieldService } from 'src/app/services/form-field.service';
 @Component({
   selector: 'app-form-builder',
   templateUrl: './form-builder.component.html',
-  styleUrls: ['./form-builder.component.scss']
+  styleUrls: ['./form-builder.component.scss'],
 })
 export class FormBuilderComponent implements OnInit {
-
-  fieldTypes = ['text', 'textarea', 'dropdown', 'checkbox', 'radio'];
+  fieldTypes = ['text', 'textarea', 'dropdown', 'checkbox', 'radio', 'email', 'reset', 'file', 'time', 'date'];
   newField: FormField = this.resetNewField();
   fields: FormField[] = [];
   form: FormGroup = this.fb.group({});
@@ -34,21 +33,30 @@ export class FormBuilderComponent implements OnInit {
   }
 
   addField() {
-    // Validation for new field
     if (!this.newField.label) {
       alert('Field label is required!');
       return;
     }
 
-    // For dropdown and radio, options must be provided
-    if ((this.newField.type === 'dropdown' || this.newField.type === 'radio') && (!this.newField.options || this.newField.options.length === 0)) {
+    if (
+      (this.newField.type === 'dropdown' || this.newField.type === 'radio') &&
+      (!this.newField.options || this.newField.options.length === 0)
+    ) {
       alert('Options are required for dropdown or radio fields!');
       return;
     }
 
-    // Add field to the service
+    if (
+      this.newField.minLength &&
+      this.newField.maxLength &&
+      this.newField.minLength > this.newField.maxLength
+    ) {
+      alert('Min Length cannot be greater than Max Length!');
+      return;
+    }
+
     this.formFieldService.addField({ ...this.newField });
-    this.newField = this.resetNewField(); // Reset field input
+    this.newField = this.resetNewField();
   }
 
   private resetNewField(): FormField {
@@ -57,6 +65,9 @@ export class FormBuilderComponent implements OnInit {
       label: '',
       placeholder: '',
       required: false,
+      email: false,
+      minLength: undefined,
+      maxLength: undefined,
       options: [],
     };
   }
@@ -64,37 +75,35 @@ export class FormBuilderComponent implements OnInit {
   private createForm() {
     this.form = this.fb.group({});
     this.fields.forEach((field) => {
-      // Only add valid fields with unique labels to the form
       if (!field.label || this.form.contains(field.label)) {
         return;
       }
 
-      const validators = field.required ? [Validators.required] : [];
+      const validators = [];
+      if (field.required) {
+        validators.push(Validators.required);
+      }
+      if (field.email) {
+        validators.push(Validators.email);
+      }
+      if (field.minLength) {
+        validators.push(Validators.minLength(field.minLength));
+      }
+      if (field.maxLength) {
+        validators.push(Validators.maxLength(field.maxLength));
+      }
+
       this.form.addControl(field.label, this.fb.control('', validators));
     });
   }
 
   onSubmit() {
-    // Filter out invalid fields before submission
-    const validFields = this.fields.filter((field) => {
-      if (field.type === 'dropdown' || field.type === 'radio') {
-        return field.options && field.options.length > 0;
-      }
-      return true;
-    });
-
-    const formValues = validFields.reduce((result, field) => {
-      result[field.label] = this.form.get(field.label)?.value;
-      return result;
-    }, {} as Record<string, any>);
-
     if (this.form.valid) {
-      console.log('Valid Fields:', validFields);
-      console.log('Form Data:', formValues);
+      console.log('Form Data:', this.form.value);
       alert('Form Submitted Successfully!');
+      this.form.reset();
     } else {
-      alert('Please fill out all required fields!');
+      alert('Please fill out all required fields correctly!');
     }
   }
-
 }
