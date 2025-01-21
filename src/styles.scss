@@ -2,16 +2,49 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
+/* General styles for both form-builder and dynamic-form */
 .full-width {
   width: 100%;
-  margin-bottom: 16px;
 }
 
-.radio-group {
-  margin-bottom: 16px;
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.form-field {
-  margin-bottom: 24px;
+.form-builder-container, .dynamic-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-field-container {
+  margin-bottom: 15px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.checkbox-group, .radio-group {
+  margin: 10px 0;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* Spacing for buttons */
+button {
+  width: 150px;
+}
+
+/* Form container margins for better spacing */
+mat-checkbox {
+  margin-top: 10px;
 }
