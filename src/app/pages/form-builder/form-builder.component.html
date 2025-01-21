@@ -1,0 +1,44 @@
+<div class="form-builder">
+  <h2>Dynamic Form Builder</h2>
+
+  <!-- Field Type -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Field Type</mat-label>
+    <mat-select [(ngModel)]="newField.type">
+      <mat-option *ngFor="let type of fieldTypes" [value]="type">
+        {{ type }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Label -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Label</mat-label>
+    <input matInput type="text" [(ngModel)]="newField.label" />
+  </mat-form-field>
+
+  <!-- Placeholder -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Placeholder</mat-label>
+    <input matInput type="text" [(ngModel)]="newField.placeholder" />
+  </mat-form-field>
+
+  <!-- Required Checkbox -->
+  <mat-checkbox [(ngModel)]="newField.required">Required</mat-checkbox>
+
+  <!-- Options for Dropdown or Radio -->
+  <div *ngIf="newField.type === 'dropdown' || newField.type === 'radio'">
+    <mat-form-field appearance="fill">
+      <mat-label>Options</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter options separated by commas"
+        (change)="handleOptionsChange($event)"
+      />
+    </mat-form-field>    
+  </div>
+  <br> <br>
+  <!-- Add Field Button -->
+  <button mat-raised-button color="primary" (click)="addField()">Add Field</button>
+</div>

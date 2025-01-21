@@ -1,0 +1,44 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div *ngFor="let field of fields">
+    <!-- Text Input -->
+    <mat-form-field *ngIf="field.type === 'text'" appearance="fill" class="full-width">
+      <mat-label>{{ field.label }}</mat-label>
+      <input matInput [formControlName]="field.label" [placeholder]="field.placeholder ?? ''" />
+    </mat-form-field>
+
+    <!-- Textarea -->
+    <mat-form-field *ngIf="field.type === 'textarea'" appearance="fill" class="full-width">
+      <mat-label>{{ field.label }}</mat-label>
+      <textarea matInput [formControlName]="field.label" [placeholder]="field.placeholder ?? ''"></textarea>
+    </mat-form-field>
+
+    <!-- Dropdown -->
+    <mat-form-field *ngIf="field.type === 'dropdown'" appearance="fill" class="full-width">
+      <mat-label>{{ field.label }}</mat-label>
+      <mat-select [formControlName]="field.label">
+        <mat-option *ngFor="let option of field.options" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+
+    <!-- Checkbox -->
+    <div *ngIf="field.type === 'checkbox'" class="checkbox-group">
+      <mat-checkbox [formControlName]="field.label">{{ field.label }}</mat-checkbox>
+    </div>
+
+    <!-- Radio Button -->
+    <div class="radio-group" *ngIf="field.type === 'radio'">
+      <label>{{ field.label }}</label>
+      <mat-radio-group [formControlName]="field.label">
+        <mat-radio-button *ngFor="let option of field.options" [value]="option">
+          {{ option }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    
+  </div>
+
+  <button mat-raised-button color="primary" type="submit">Submit</button>
+</form>
